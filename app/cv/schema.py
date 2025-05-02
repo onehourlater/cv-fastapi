@@ -1,4 +1,4 @@
-from typing import List, Union
+from typing import List
 
 from pydantic import BaseModel
 
@@ -11,15 +11,19 @@ class CVBase(BaseModel):
     user: UserBase
     about: str
 
+
 class CVDetail(CVBase):
     projects: List[CVProjectBase]
+
 
 class CVList(BaseModel):
     id: int
     about: str
 
+
 class CreateCVBase(BaseModel):
     about: str
+
 
 class CreateCVBaseWithPosition(CreateCVBase):
     position: int

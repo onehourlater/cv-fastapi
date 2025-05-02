@@ -1,12 +1,9 @@
-from typing import List, Annotated, Union
-
-from passlib.context import CryptContext
+from typing import Annotated, Union
 
 from fastapi import Depends
 from fastapi import HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 
-from sqlalchemy import select, func
 from sqlalchemy.orm import Session
 
 from app.config import auth_settings
@@ -19,10 +16,11 @@ from app.user.manager import UserManager, get_user_manager
 
 from .schema import UserBaseAuth
 from .utils import verify_password, get_password_hash
-from .utils import create_JWT_token, decode_jwt_token
+from .utils import decode_jwt_token
 
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl='')
+
 
 class AuthManager:
     def __init__(self, db: Session, user_manager: UserManager):
@@ -36,16 +34,12 @@ class AuthManager:
         user_password_hashed = get_password_hash(auth_data.password)
 
         try:
-            new_user = self.user_manager.create_user(CreateUserBase(
-                email=auth_data.email,
-                password=user_password_hashed
-            ))
+            new_user = self.user_manager.create_user(
+                CreateUserBase(email=auth_data.email, password=user_password_hashed)
+            )
         except Exception as e:
             print(f'self.user_manager.create_user ERROR {e}')
-            raise HTTPException(
-                status_code=500,
-                detail=str(e)
-            )
+            raise HTTPException(status_code=500, detail=str(e))
 
         return new_user
 
@@ -86,18 +80,26 @@ class AuthManager:
 
         return user
 
-def get_auth_manager(db: Session = Depends(get_db), user_manager = Depends(get_user_manager)) -> AuthManager:
+
+def get_auth_manager(
+    db: Session = Depends(get_db), user_manager=Depends(get_user_manager)
+) -> AuthManager:
     print()
     print('[get_auth_manager]')
     return AuthManager(db, user_manager)
 
-def get_current_user(*, token: Annotated[str, Depends(oauth2_scheme)], auth_manager = Depends(get_auth_manager)) -> User:
+
+def get_current_user(
+    *,
+    token: Annotated[str, Depends(oauth2_scheme)],
+    auth_manager=Depends(get_auth_manager),
+) -> User:
     user = auth_manager.get_user_by_token(token)
     if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Could not validate credentials",
-            headers={"WWW-Authenticate": "Bearer"},
+            detail='Could not validate credentials',
+            headers={'WWW-Authenticate': 'Bearer'},
         )
 
     return user

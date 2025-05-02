@@ -1,7 +1,6 @@
-from typing import List, Annotated
+from typing import List
 
 from fastapi import Depends
-from fastapi import HTTPException, status
 
 from app.exceptions import NoPermission
 from app.database.core import get_db, Session
@@ -30,8 +29,7 @@ class CVManager:
     def create_cv(self, user: User, cv_data: CreateCVBase) -> CVBase:
         user_cvs = get_cvs_by_user(self.db, user.id)
         cv_data_to_create = CreateCVBaseWithPosition(
-            about=cv_data.about,
-            position=len(user_cvs) + 1
+            about=cv_data.about, position=len(user_cvs) + 1
         )
 
         return create_cv(self.db, user.id, cv_data_to_create)
@@ -53,7 +51,7 @@ class CVManager:
             client=cv_project_data.client,
             link=cv_project_data.link,
             description=cv_project_data.description,
-            position=len(cv_projects) + 1
+            position=len(cv_projects) + 1,
         )
 
         return create_cv_project(self.db, cv_id, project_data_to_create)
@@ -61,7 +59,6 @@ class CVManager:
 
 def get_cv_manager(db: Session = Depends(get_db)) -> CVManager:
     return CVManager(db)
-
 
 
 #

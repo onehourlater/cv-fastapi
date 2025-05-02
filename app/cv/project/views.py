@@ -2,13 +2,10 @@ import logging
 
 from typing import List
 
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, HTTPException
 from fastapi import Depends
-from sqlalchemy.orm import Session
-from sqlalchemy.exc import IntegrityError
 
 from app.exceptions import NoPermission
-from app.database.core import get_db
 
 from app.auth.manager import get_current_user
 from app.user.models import User
@@ -27,17 +24,20 @@ async def get_cv_projects_list(
     *,
     current_user: User = Depends(get_current_user),
     cv_manager: CVManager = Depends(get_cv_manager),
-    cv_id: int
+    cv_id: int,
 ) -> List[CVProjectPublic]:
     try:
         cv_list = cv_manager.get_cv_project(current_user, cv_id)
     except NoPermission as e:
         raise HTTPException(403, str(e))
     except Exception as e:
-        log.error(f'error occured on cv_project_router /get_cv_projects_list handler {e}')
-        raise HTTPException(500, f'Error occured')
+        log.error(
+            f'error occured on cv_project_router /get_cv_projects_list handler {e}'
+        )
+        raise HTTPException(500, 'Error occured')
 
     return cv_list
+
 
 @cv_project_router.post('/')
 async def create_cv_project(
@@ -45,11 +45,12 @@ async def create_cv_project(
     current_user: User = Depends(get_current_user),
     cv_manager: CVManager = Depends(get_cv_manager),
     cv_id: int,
-    cv_project_data: CreateCVProject
+    cv_project_data: CreateCVProject,
 ) -> CVProjectPublic:
     print()
     print('cv_project_data cv_project_data: ', cv_project_data)
     cv = cv_manager.create_cv_project(current_user, cv_id, cv_project_data)
     return cv
+
 
 #

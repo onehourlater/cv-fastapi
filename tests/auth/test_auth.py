@@ -1,17 +1,10 @@
 import pytest
-from unittest import TestCase
 
-from fastapi import FastAPI
 from fastapi.testclient import TestClient
 
-from sqlalchemy import select
-from sqlalchemy.orm import Session
-
-from tests.constants import TestConstants
 from tests.factories.user import UserFactory
 
 from app.user.models import User
-from app.auth import schema as auth_schema
 from app.auth.manager import AuthManager
 
 
@@ -20,35 +13,44 @@ class TestAuth:
     # TODO: check access with auth token after username changed
 
     def test_signup(self, client: TestClient):
-        response = client.post('/api/v1/signup', json={
-    	   'email': 'hello@gmail.com',
-           'password': 'kitty',
-        })
+        response = client.post(
+            '/api/v1/signup',
+            json={
+                'email': 'hello@gmail.com',
+                'password': 'kitty',
+            },
+        )
         assert response.status_code == 200
         assert response.json() == {
-        	'id': 1,
-        	'email': 'hello@gmail.com',
-        	'username': 'hello',
+            'id': 1,
+            'email': 'hello@gmail.com',
+            'username': 'hello',
         }
 
-        response = client.post('/api/v1/signup', json={
-    	   'email': 'hello@mail.ru',
-           'password': 'kitty',
-        })
+        response = client.post(
+            '/api/v1/signup',
+            json={
+                'email': 'hello@mail.ru',
+                'password': 'kitty',
+            },
+        )
         assert response.status_code == 200
         assert response.json() == {
-        	'id': 2,
-        	'email': 'hello@mail.ru', # different Email
-        	'username': 'hello-2',
+            'id': 2,
+            'email': 'hello@mail.ru',  # different Email
+            'username': 'hello-2',
         }
 
     def test_signup_already_exists(self, client: TestClient, auth_manager: AuthManager):
         user: User = UserFactory()
 
-        response = client.post('/api/v1/signup', json={
-            'email': user.email,
-            'password': 'kitty',
-        })
+        response = client.post(
+            '/api/v1/signup',
+            json={
+                'email': user.email,
+                'password': 'kitty',
+            },
+        )
         assert response.status_code == 400
 
     def test_signup_no_email(self, client: TestClient):
@@ -64,7 +66,7 @@ class TestAuth:
         print()
         print('response.json(): ', response.json())
 
-    '''
+    """
     def test_get_user(self, client: TestClient, auth_manager):
         print()
         print('[test_get_user] auth_manager: ', auth_manager)
@@ -76,11 +78,7 @@ class TestAuth:
         response_json = response.json()
         assert response_json['email'] == 'hello@gmail.com'
         assert response_json['username'] == 'hello'
-    '''
-
-
-
-
+    """
 
 
 #

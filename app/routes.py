@@ -4,10 +4,6 @@ from app.auth.views import auth_router
 from app.user.views import user_router
 from app.cv.views import cv_router
 
-'''
-router = APIRouter()
-router.include_router(item.router, tags=["item"], prefix="/item")
-'''
 
 app_router = APIRouter()
 

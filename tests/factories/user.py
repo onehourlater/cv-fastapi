@@ -5,6 +5,7 @@ from tests.constants import TestConstants
 from app.user.models import User
 from app.auth.utils import get_password_hash
 
+
 class UserFactory(factory.alchemy.SQLAlchemyModelFactory):
     class Meta:
         model = User
@@ -13,9 +14,8 @@ class UserFactory(factory.alchemy.SQLAlchemyModelFactory):
     email = factory.Faker('email')
     username = factory.Faker('user_name')
     password = factory.LazyFunction(
-       lambda: get_password_hash(TestConstants.USER_PASSWORD)
+        lambda: get_password_hash(TestConstants.USER_PASSWORD)
     )
-
 
     @classmethod
     def _create(cls, model_class, *args, **kwargs):

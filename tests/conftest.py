@@ -1,4 +1,3 @@
-import os
 import pytest
 
 from typing import Any, Generator
@@ -7,7 +6,7 @@ from fastapi import FastAPI
 from fastapi.testclient import TestClient
 
 from sqlalchemy import create_engine
-from sqlalchemy import select, func
+from sqlalchemy import select
 from sqlalchemy.orm import sessionmaker
 
 from app.config import auth_settings
@@ -25,20 +24,19 @@ from .factories.user import UserFactory
 from .factories.cv import CVFactory
 
 
-engine = create_engine(
-    'sqlite://', connect_args={"check_same_thread": False}
-)
+engine = create_engine('sqlite://', connect_args={'check_same_thread': False})
 
 Session = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-'''
+"""
 user_manager = get_user_manager(Session)
 auth_manager = get_auth_manager(Session, user_manager)
 
 print('')
 print('[CONFTEST]')
 print('user_manager: ', user_manager)
-'''
+"""
+
 
 @pytest.fixture(autouse=True)
 def app() -> Generator[FastAPI, Any, None]:
@@ -71,21 +69,27 @@ def db_session(app: FastAPI) -> Generator[Session, Any, None]:
     # return connection to the Engine
     connection.close()
 
+
 @pytest.fixture()
 def user_manager(db_session: Session):
     yield get_user_manager(db_session)
 
+
 @pytest.fixture()
 def auth_manager(db_session: Session, user_manager):
     yield get_auth_manager(db_session, user_manager)
+
 
 @pytest.fixture(autouse=True)
 def set_session_for_factories(db_session: Session):
     UserFactory._meta.sqlalchemy_session = db_session
     CVFactory._meta.sqlalchemy_session = db_session
 
+
 def get_or_create_default_user(db_session: Session) -> User:
-    user = db_session.scalars(select(User).where(User.email==TestConstants.USER_EMAIL)).one_or_none()
+    user = db_session.scalars(
+        select(User).where(User.email == TestConstants.USER_EMAIL)
+    ).one_or_none()
     print()
     print('get_or_create_default_user')
     print('user: ', user)
@@ -95,18 +99,27 @@ def get_or_create_default_user(db_session: Session) -> User:
 
     return UserFactory(email=TestConstants.USER_EMAIL)
 
-@pytest.fixture()
-def default_user(client: TestClient, db_session: Session) -> Generator[TestClient, Any, None]:
-    yield get_or_create_default_user(db_session)
 
 @pytest.fixture()
-def authenticated_client(client: TestClient, db_session: Session) -> Generator[TestClient, Any, None]:
+def default_user(
+    client: TestClient, db_session: Session
+) -> Generator[TestClient, Any, None]:
+    yield get_or_create_default_user(db_session)
+
+
+@pytest.fixture()
+def authenticated_client(
+    client: TestClient, db_session: Session
+) -> Generator[TestClient, Any, None]:
     default_user: User = get_or_create_default_user(db_session)
-    access_token, access_token_inspiration = create_JWT_token({ auth_settings.JWT_USERNAME_KEY: default_user.username })
-    headers = {"Authorization": f"Bearer {access_token}"}
+    access_token, access_token_inspiration = create_JWT_token(
+        {auth_settings.JWT_USERNAME_KEY: default_user.username}
+    )
+    headers = {'Authorization': f'Bearer {access_token}'}
     client.headers.update(headers)
     yield client
     client.headers.clear()
+
 
 @pytest.fixture()
 def client(app: FastAPI, db_session: Session) -> Generator[TestClient, Any, None]:

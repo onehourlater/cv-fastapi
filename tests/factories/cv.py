@@ -1,9 +1,7 @@
 import factory
 
-from tests.constants import TestConstants
 from tests.factories.user import UserFactory
 
-from app.user.models import User
 from app.cv.models import CV
 
 

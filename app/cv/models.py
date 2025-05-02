@@ -2,7 +2,7 @@ from datetime import datetime
 
 from typing import Optional, List
 
-from sqlalchemy import Integer, String, ForeignKey
+from sqlalchemy import ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from ..database.core import Base
@@ -27,9 +27,8 @@ class CV(Base):
 
     projects: Mapped[List['CVProject']] = relationship(back_populates='cv')
 
-
     def __repr__(self):
-          return f'CV: {self.id}'
+        return f'CV: {self.id}'
 
 
 class CVProject(Base):
@@ -52,4 +51,4 @@ class CVProject(Base):
     position: Mapped[int]
 
     def __repr__(self):
-          return f'CV Project: {self.id}'
+        return f'CV Project: {self.id}'

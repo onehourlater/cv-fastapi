@@ -1,5 +1,6 @@
 from sqlalchemy import Enum
 
+
 class TestConstants(Enum):
     __test__ = False
 

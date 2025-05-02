@@ -2,12 +2,8 @@ import logging
 
 from typing import List
 
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter
 from fastapi import Depends
-from sqlalchemy.orm import Session
-from sqlalchemy.exc import IntegrityError
-
-from app.database.core import get_db
 
 from app.auth.manager import get_current_user
 from app.user.models import User
@@ -15,9 +11,7 @@ from app.user.models import User
 from .project.views import cv_project_router
 
 from .manager import CVManager, get_cv_manager
-from .models import CV
 from .schema import CVList, CVDetail, CreateCVBase
-from .service import get_cvs_by_user
 
 
 log = logging.getLogger(__name__)
@@ -29,20 +23,22 @@ cv_router.include_router(cv_project_router)
 @cv_router.get('/')
 async def get_cv_list(
     current_user: User = Depends(get_current_user),
-    cv_manager: CVManager = Depends(get_cv_manager)
+    cv_manager: CVManager = Depends(get_cv_manager),
 ) -> List[CVList]:
     cv_list = cv_manager.get_cvs_by_user(current_user)
     return cv_list
+
 
 @cv_router.get('/{cv_id}')
 async def get_cv(
     *,
     current_user: User = Depends(get_current_user),
     cv_manager: CVManager = Depends(get_cv_manager),
-    cv_id: int
+    cv_id: int,
 ) -> CVDetail:
     cv = cv_manager.get_cv_by_id(current_user, cv_id)
     return cv
+
 
 @cv_router.post('/')
 async def create_cv(
@@ -53,7 +49,6 @@ async def create_cv(
 ) -> CVList:
     cv = cv_manager.create_cv(current_user, cv_data)
     return cv
-
 
 
 #

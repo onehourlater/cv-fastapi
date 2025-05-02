@@ -1,4 +1,4 @@
-from typing import Annotated, Optional
+from typing import Annotated
 
 from fastapi import Depends
 
@@ -9,13 +9,9 @@ from sqlalchemy.orm import Session, sessionmaker
 from app.config import db_settings
 
 
-POSTGRES_URL = (
-    f'postgresql://{db_settings.POSTGRES_USER}:{db_settings.POSTGRES_PASSWORD}@{db_settings.POSTGRES_HOSTNAME}:{db_settings.DATABASE_PORT}/{db_settings.POSTGRES_DB}'
-)
+POSTGRES_URL = f'postgresql://{db_settings.POSTGRES_USER}:{db_settings.POSTGRES_PASSWORD}@{db_settings.POSTGRES_HOSTNAME}:{db_settings.DATABASE_PORT}/{db_settings.POSTGRES_DB}'
 
-engine = create_engine(
-    POSTGRES_URL, echo=True
-)
+engine = create_engine(POSTGRES_URL, echo=True)
 # WHY: что это делает?
 # setup_guids_postgresql(engine)
 
@@ -29,9 +25,11 @@ def drop_create_models():
         Base.metadata.drop_all(bind=engine)
         Base.metadata.create_all(bind=engine)
 
+
 def create_models():
     with engine.begin() as conn:
         Base.metadata.create_all(bind=engine)
+
 
 def get_db() -> Session:
     print()
@@ -40,10 +38,8 @@ def get_db() -> Session:
         print('[yield session]')
         yield session
 
+
 DbSession = Annotated[Session, Depends(get_db)]
-
-
-
 
 
 #
