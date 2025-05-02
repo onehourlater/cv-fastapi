@@ -1,0 +1,17 @@
+[project]
+name = "test-fastapi"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "alembic>=1.15.2",
+    "fastapi[standard]>=0.115.12",
+    "poethepoet>=0.34.0",
+    "psycopg2>=2.9.10",
+    "sqlalchemy>=2.0.40",
+    "uvicorn>=0.34.2",
+]
+
+[tool.poe.tasks]
+uvicorn = "uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload"
