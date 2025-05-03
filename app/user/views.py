@@ -57,7 +57,7 @@ async def update_user_profile(
     current_user: Annotated[User, Depends(get_current_user(required=True))],
 ) -> UserProfile:
     if current_user.id != user_id:
-        raise HTTPException(405, 'Method Not Allowed')
+        raise HTTPException(403, 'You are trying to update a user that is not you')
 
     user = user_manager.get_user_by_id(user_id)
     if not user:

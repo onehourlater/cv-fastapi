@@ -49,7 +49,7 @@ class TestUser:
         response = authenticated_client.put(
             f'/api/v1/users/{user_2.id}', json=TestConstants.USER_PROFILE_DATA
         )
-        assert response.status_code == 405
+        assert response.status_code == 403
 
     def test_update_user_profile_unauthorized(
         self, client: TestClient, default_user: User, auth_manager
