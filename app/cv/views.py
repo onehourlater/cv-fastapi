@@ -2,9 +2,10 @@ import logging
 
 from typing import List
 
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 from fastapi import Depends
 
+from app.exceptions import NoPermission
 from app.auth.manager import get_current_user
 from app.user.models import User
 
@@ -39,6 +40,18 @@ async def get_cv(
     cv = cv_manager.get_cv_by_id(current_user, cv_id)
     return cv
 
+@cv_router.get('/{cv_id}/public')
+async def get_cv_public(
+    *,
+    current_user: User = Depends(get_current_user(required=False)),
+    cv_manager: CVManager = Depends(get_cv_manager),
+    cv_id: int,
+) -> CVDetail:
+    try:
+        cv = cv_manager.get_public_cv_by_id(current_user, cv_id)
+    except NoPermission as e:
+        raise HTTPException(403, str(e))
+    return cv
 
 @cv_router.post('/')
 async def create_cv(
