@@ -1,6 +1,4 @@
 import pytest
-from datetime import datetime
-
 from fastapi.testclient import TestClient
 
 from tests.constants import TestConstants
@@ -46,9 +44,7 @@ class TestCVProject:
         assert response.status_code == 200
         response_json = response.json()
         assert response_json['title'] == TestConstants.CV_PROJECT_TITLE
-        assert response_json['end_date'] == datetime.utcfromtimestamp(
-            TestConstants.CV_PROJECT_END_DATE
-        ).strftime('%Y-%m-%dT%H:%M:%S')
+        assert response_json['end_date'] == TestConstants.CV_PROJECT_END_DATE
         assert response_json['role'] == TestConstants.CV_PROJECT_ROLE
         assert response_json['link'] == TestConstants.CV_PROJECT_LINK
         assert response_json['description'] == TestConstants.CV_PROJECT_DESCRIPTION

@@ -2,9 +2,12 @@ from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 
 from app.config import AppSettings
-from app.database.core import create_models
+from app.database.core import drop_models, create_models
 
 from .routes import app_router
+
+if False:
+    drop_models()
 
 create_models()
 

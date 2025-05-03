@@ -4,7 +4,7 @@ from datetime import datetime
 
 from typing import Optional, List
 
-from sqlalchemy import ForeignKey
+from sqlalchemy import ForeignKey, DateTime
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from ..database.core import Base
@@ -52,7 +52,7 @@ class CVProject(Base):
     title: Mapped[str]
     role: Mapped[Optional[str]] = mapped_column(default='')
 
-    end_date: Mapped[datetime]
+    end_date: Mapped[datetime] = mapped_column(DateTime(timezone=True))
     is_ongoing: Mapped[Optional[bool]] = mapped_column(default=False)
 
     link: Mapped[Optional[str]] = mapped_column(default='')

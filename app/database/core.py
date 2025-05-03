@@ -20,9 +20,8 @@ Base = declarative_base()
 session_local = sessionmaker(bind=engine)
 
 
-def drop_create_models():
+def drop_models():
     Base.metadata.drop_all(bind=engine)
-    Base.metadata.create_all(bind=engine)
 
 def create_models():
     Base.metadata.create_all(bind=engine)
