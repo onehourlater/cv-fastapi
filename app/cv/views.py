@@ -22,7 +22,7 @@ cv_router.include_router(cv_project_router)
 
 @cv_router.get('/')
 async def get_cv_list(
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(get_current_user(required=True)),
     cv_manager: CVManager = Depends(get_cv_manager),
 ) -> List[CVList]:
     cv_list = cv_manager.get_cvs_by_user(current_user)
@@ -32,7 +32,7 @@ async def get_cv_list(
 @cv_router.get('/{cv_id}')
 async def get_cv(
     *,
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(get_current_user(required=True)),
     cv_manager: CVManager = Depends(get_cv_manager),
     cv_id: int,
 ) -> CVDetail:
@@ -43,7 +43,7 @@ async def get_cv(
 @cv_router.post('/')
 async def create_cv(
     *,
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(get_current_user(required=True)),
     cv_manager: CVManager = Depends(get_cv_manager),
     cv_data: CreateCVBase,
 ) -> CVList:

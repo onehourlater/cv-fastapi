@@ -75,7 +75,7 @@ async def signin(
 @auth_router.post('/password')
 async def change_password(
     password: Annotated[str, Body(embed=True)],
-    current_user: Annotated[User, Depends(get_current_user)],
+    current_user: Annotated[User, Depends(get_current_user(required=True))],
     auth_manager=Depends(get_auth_manager),
 ):
     auth_manager.change_password(current_user, password)
@@ -111,7 +111,7 @@ async def auth_refresh(
 
 
 @auth_router.get('/me')
-async def get_me(current_user: Annotated[User, Depends(get_current_user)]) -> UserBase:
+async def get_me(current_user: Annotated[User, Depends(get_current_user(required=True))]) -> UserBase:
     return current_user
 
 

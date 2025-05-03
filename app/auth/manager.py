@@ -19,7 +19,7 @@ from .utils import verify_password, get_password_hash
 from .utils import decode_jwt_token
 
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl='')
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl='', auto_error=False)
 
 
 class AuthManager:
@@ -84,22 +84,21 @@ class AuthManager:
 def get_auth_manager(
     db: Session = Depends(get_db), user_manager=Depends(get_user_manager)
 ) -> AuthManager:
-    print()
-    print('[get_auth_manager]')
     return AuthManager(db, user_manager)
 
+def get_current_user(required: bool = True):
+    async def _get_user(
+        token: Annotated[str, Depends(oauth2_scheme)],
+        auth_manager: Annotated[AuthManager, Depends(get_auth_manager)],
+    ) -> User:
+        user = auth_manager.get_user_by_token(token)
+        if required and not user:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail='Could not validate credentials',
+                headers={'WWW-Authenticate': 'Bearer'},
+            )
 
-def get_current_user(
-    *,
-    token: Annotated[str, Depends(oauth2_scheme)],
-    auth_manager=Depends(get_auth_manager),
-) -> User:
-    user = auth_manager.get_user_by_token(token)
-    if not user:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail='Could not validate credentials',
-            headers={'WWW-Authenticate': 'Bearer'},
-        )
+        return user
 
-    return user
+    return _get_user

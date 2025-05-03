@@ -22,7 +22,7 @@ cv_project_router = APIRouter(prefix='/{cv_id}/projects')
 @cv_project_router.get('/')
 async def get_cv_projects_list(
     *,
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(get_current_user(required=True)),
     cv_manager: CVManager = Depends(get_cv_manager),
     cv_id: int,
 ) -> List[CVProjectPublic]:
@@ -42,7 +42,7 @@ async def get_cv_projects_list(
 @cv_project_router.post('/')
 async def create_cv_project(
     *,
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(get_current_user(required=True)),
     cv_manager: CVManager = Depends(get_cv_manager),
     cv_id: int,
     cv_project_data: CreateCVProject,

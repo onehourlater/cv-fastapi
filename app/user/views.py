@@ -54,7 +54,7 @@ async def update_user_profile(
     user_id: int,
     userProfileData: UpdateUserBase,
     user_manager=Depends(get_user_manager),
-    current_user: Annotated[User, Depends(get_current_user)],
+    current_user: Annotated[User, Depends(get_current_user(required=True))],
 ) -> UserProfile:
     if current_user.id != user_id:
         raise HTTPException(405, 'Method Not Allowed')
