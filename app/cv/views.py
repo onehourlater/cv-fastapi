@@ -12,7 +12,7 @@ from app.user.models import User
 from .project.views import cv_project_router
 
 from .manager import CVManager, get_cv_manager
-from .schema import CVList, CVDetail, CreateCVBase
+from .schema import CVList, CVDetail, CVDetailPublic, CreateCVBase
 
 
 log = logging.getLogger(__name__)
@@ -46,7 +46,7 @@ async def get_cv_public(
     current_user: User = Depends(get_current_user(required=False)),
     cv_manager: CVManager = Depends(get_cv_manager),
     cv_id: int,
-) -> CVDetail:
+) -> CVDetailPublic:
     try:
         cv = cv_manager.get_public_cv_by_id(current_user, cv_id)
     except NoPermission as e:

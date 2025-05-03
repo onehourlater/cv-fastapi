@@ -3,7 +3,7 @@ from typing import List
 from pydantic import BaseModel
 
 from .project.schema import CVProjectBase
-from app.user.schema import UserBase
+from app.user.schema import UserBase, UserProfile
 
 
 class CVBase(BaseModel):
@@ -13,6 +13,11 @@ class CVBase(BaseModel):
 
 
 class CVDetail(CVBase):
+    projects: List[CVProjectBase]
+
+
+class CVDetailPublic(CVBase):
+    user: UserProfile # override
     projects: List[CVProjectBase]
 
 
