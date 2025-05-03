@@ -18,7 +18,7 @@ def create_cv_project(
         cv_id=cv_id,
         title=project_data.title,
         end_date=project_data.end_date,
-        client=project_data.client,
+        role=project_data.role,
         link=project_data.link,
         description=project_data.description,
         position=project_data.position,

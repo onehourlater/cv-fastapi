@@ -38,7 +38,7 @@ class TestCVProject:
             json={
                 'title': TestConstants.CV_PROJECT_TITLE,
                 'end_date': TestConstants.CV_PROJECT_END_DATE,
-                'client': TestConstants.CV_PROJECT_CLIENT,
+                'role': TestConstants.CV_PROJECT_ROLE,
                 'link': TestConstants.CV_PROJECT_LINK,
                 'description': TestConstants.CV_PROJECT_DESCRIPTION,
             },
@@ -49,7 +49,7 @@ class TestCVProject:
         assert response_json['end_date'] == datetime.utcfromtimestamp(
             TestConstants.CV_PROJECT_END_DATE
         ).strftime('%Y-%m-%dT%H:%M:%S')
-        assert response_json['client'] == TestConstants.CV_PROJECT_CLIENT
+        assert response_json['role'] == TestConstants.CV_PROJECT_ROLE
         assert response_json['link'] == TestConstants.CV_PROJECT_LINK
         assert response_json['description'] == TestConstants.CV_PROJECT_DESCRIPTION
 

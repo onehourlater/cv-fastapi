@@ -50,7 +50,7 @@ class CVProject(Base):
     cv: Mapped['CV'] = relationship(back_populates='projects')
 
     title: Mapped[str]
-    client: Mapped[Optional[str]] = mapped_column(default='')
+    role: Mapped[Optional[str]] = mapped_column(default='')
 
     end_date: Mapped[datetime]
     is_ongoing: Mapped[Optional[bool]] = mapped_column(default=False)

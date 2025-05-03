@@ -16,6 +16,6 @@ class TestConstants(Enum):
 
     CV_PROJECT_TITLE = 'Pingdog SAAS'
     CV_PROJECT_END_DATE = 1643662800
-    CV_PROJECT_CLIENT = ''
+    CV_PROJECT_ROLE = ''
     CV_PROJECT_LINK = 'https://pingdog.ru'
     CV_PROJECT_DESCRIPTION = 'Worked on realtime websites monitoring'

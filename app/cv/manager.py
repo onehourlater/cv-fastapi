@@ -60,7 +60,7 @@ class CVManager:
         project_data_to_create = CreateCVProjectWithPosition(
             title=cv_project_data.title,
             end_date=cv_project_data.end_date,
-            client=cv_project_data.client,
+            role=cv_project_data.role,
             link=cv_project_data.link,
             description=cv_project_data.description,
             position=len(cv_projects) + 1,
