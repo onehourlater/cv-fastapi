@@ -7,6 +7,7 @@ from app.database.core import get_db, Session
 
 from app.user.models import User
 
+from .models import PublicStatus
 from .schema import CVBase, CVDetail, CreateCVBase, CreateCVBaseWithPosition
 from .service import get_cvs_by_user, get_cv_by_id, create_cv, is_cv_belongs_to_user
 from .project.schema import CreateCVProjectWithPosition
@@ -25,6 +26,17 @@ class CVManager:
             raise NoPermission('CV does not belong to User')
 
         return get_cv_by_id(self.db, cv_id)
+
+    def get_public_cv_by_id(self, user: User, cv_id) -> CVDetail:
+        cv = get_cv_by_id(self.db, cv_id)
+
+        if user and user.id == cv.user_id:
+            return cv
+
+        if cv.public_status == PublicStatus.PRIVATE:
+            raise NoPermission('CV is private')
+
+        return cv
 
     def create_cv(self, user: User, cv_data: CreateCVBase) -> CVBase:
         user_cvs = get_cvs_by_user(self.db, user.id)

@@ -1,3 +1,4 @@
+import enum
 from typing import TYPE_CHECKING
 from datetime import datetime
 
@@ -18,6 +19,11 @@ if TYPE_CHECKING:
 # education
 # contacts
 
+class PublicStatus(enum.Enum):
+    PUBLIC      = 2
+    LINK_ACCESS = 1
+    PRIVATE     = 0
+
 class CV(Base):
     __tablename__ = 'cv_table'
 
@@ -28,6 +34,7 @@ class CV(Base):
     about: Mapped[Optional[str]] = mapped_column(default='')
 
     position: Mapped[int]
+    public_status: Mapped[PublicStatus] = mapped_column(default=PublicStatus.PRIVATE)
 
     projects: Mapped[List['CVProject']] = relationship(back_populates='cv')
 

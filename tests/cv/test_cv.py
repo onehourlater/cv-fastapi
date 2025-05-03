@@ -33,5 +33,47 @@ class TestCV:
         response_json_cv = response_json[0]
         assert response_json_cv['about'] == cv.about
 
+    def test_get_cv(
+        self, authenticated_client: TestClient, default_user: User, auth_manager
+    ):
+        cv: CV = CVFactory(user=default_user)
+
+        response = authenticated_client.get(f'/api/v1/cvs/{cv.id}')
+        assert response.status_code == 200
+        response_json = response.json()
+        assert 'user' in response_json
+        assert 'about' in response_json
+        assert 'projects' in response_json
+
+    def test_get_cv_unauthorizated(
+        self, client: TestClient, auth_manager
+    ):
+        cv: CV = CVFactory()
+
+        response = client.get(f'/api/v1/cvs/{cv.id}')
+        assert response.status_code == 401
+
+    def test_get_public_cv(
+        self, authenticated_client: TestClient, default_user: User, auth_manager
+    ):
+        cv: CV = CVFactory(user=default_user)
+
+        response = authenticated_client.get(f'/api/v1/cvs/{cv.id}/public')
+        assert response.status_code == 200
+        response_json = response.json()
+        assert 'user' in response_json
+        assert 'about' in response_json
+        assert 'projects' in response_json
+
+    def test_get_public_cv_unauthorizated(
+        self, client: TestClient, auth_manager
+    ):
+        cv: CV = CVFactory()
+
+        response = client.get(f'/api/v1/cvs/{cv.id}/public')
+        assert response.status_code == 403
+        response_json = response.json()
+        assert response_json['detail'] == 'CV is private'
+
 
 #
