@@ -11,6 +11,7 @@ class CVProjectBase(BaseModel):
     role: str
     link: str
     description: str
+    position: int
 
 
 class CVProjectPublic(BaseModel):

@@ -11,7 +11,7 @@ from app.auth.manager import get_current_user
 from app.user.models import User
 
 from ..manager import CVManager, get_cv_manager
-from .schema import CreateCVProject, CVProjectPublic
+from .schema import CreateCVProject, CVProjectBase
 
 log = logging.getLogger(__name__)
 
@@ -25,7 +25,7 @@ async def get_cv_projects_list(
     current_user: User = Depends(get_current_user(required=True)),
     cv_manager: CVManager = Depends(get_cv_manager),
     cv_id: int,
-) -> List[CVProjectPublic]:
+) -> List[CVProjectBase]:
     try:
         cv_list = cv_manager.get_cv_project(current_user, cv_id)
     except NoPermission as e:
@@ -46,7 +46,7 @@ async def create_cv_project(
     cv_manager: CVManager = Depends(get_cv_manager),
     cv_id: int,
     cv_project_data: CreateCVProject,
-) -> CVProjectPublic:
+) -> CVProjectBase:
     print()
     print('cv_project_data cv_project_data: ', cv_project_data)
     cv = cv_manager.create_cv_project(current_user, cv_id, cv_project_data)
