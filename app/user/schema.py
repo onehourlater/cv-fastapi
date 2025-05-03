@@ -19,7 +19,7 @@ class UserPictureBase(BaseModel):
 
 
 class UserProfile(UserBase):
-    picture: UserPictureBase
+    picture: Union[UserPictureBase, None] = None
     full_name: Union[str, None] = None
     kind_of_activity: Union[str, None] = None
     about: Union[str, None] = None
