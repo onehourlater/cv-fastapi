@@ -1,6 +1,9 @@
 from decouple import config
 
 
+class AppSettings:
+    MEDIA_FOLDER_PATH: str = config('MEDIA_FOLDER_PATH', '')
+
 class DBSettings:
     POSTGRES_HOSTNAME: str = config('DB_HOSTNAME', 'localhost')
     POSTGRES_DB: str = config('DB_NAME', '')

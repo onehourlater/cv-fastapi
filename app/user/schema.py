@@ -14,7 +14,12 @@ class CreateUserBase(BaseModel):
     password: str
 
 
+class UserPictureBase(BaseModel):
+    filename: str
+
+
 class UserProfile(UserBase):
+    picture: UserPictureBase
     full_name: Union[str, None] = None
     kind_of_activity: Union[str, None] = None
     about: Union[str, None] = None
