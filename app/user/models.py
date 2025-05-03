@@ -1,9 +1,14 @@
+from typing import TYPE_CHECKING
 from typing import Optional, List
 
 from sqlalchemy import String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from ..database.core import Base
+
+# in case ruff: CV is undefined
+if TYPE_CHECKING:
+    from app.cv.models import CV
 
 
 def get_default_username(context):

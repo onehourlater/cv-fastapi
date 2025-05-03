@@ -21,15 +21,11 @@ session_local = sessionmaker(bind=engine)
 
 
 def drop_create_models():
-    with engine.begin() as conn:
-        Base.metadata.drop_all(bind=engine)
-        Base.metadata.create_all(bind=engine)
-
+    Base.metadata.drop_all(bind=engine)
+    Base.metadata.create_all(bind=engine)
 
 def create_models():
-    with engine.begin() as conn:
-        Base.metadata.create_all(bind=engine)
-
+    Base.metadata.create_all(bind=engine)
 
 def get_db() -> Session:
     print()

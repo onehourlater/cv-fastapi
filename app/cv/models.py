@@ -1,3 +1,4 @@
+from typing import TYPE_CHECKING
 from datetime import datetime
 
 from typing import Optional, List
@@ -8,11 +9,14 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from ..database.core import Base
 
 
+# in case ruff: User is undefined
+if TYPE_CHECKING:
+    from app.user.models import User
+
 # projects - link to projects
 # work experience
 # education
 # contacts
-
 
 class CV(Base):
     __tablename__ = 'cv_table'
