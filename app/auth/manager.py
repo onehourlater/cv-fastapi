@@ -4,10 +4,7 @@ from fastapi import Depends
 from fastapi import HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 
-from sqlalchemy.orm import Session
-
 from app.config import auth_settings
-from app.database.core import get_db
 from app.exceptions import ExistsError, NotExistsError, WrongCredentials
 
 from app.user.schema import CreateUserBase
@@ -23,8 +20,7 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl='', auto_error=False)
 
 
 class AuthManager:
-    def __init__(self, db: Session, user_manager: UserManager):
-        self.db = db
+    def __init__(self, user_manager: UserManager):
         self.user_manager = user_manager
 
     def signup(self, auth_data: UserBaseAuth) -> User:
@@ -82,9 +78,9 @@ class AuthManager:
 
 
 def get_auth_manager(
-    db: Session = Depends(get_db), user_manager=Depends(get_user_manager)
+    user_manager=Depends(get_user_manager)
 ) -> AuthManager:
-    return AuthManager(db, user_manager)
+    return AuthManager(user_manager)
 
 def get_current_user(required: bool = True):
     async def _get_user(

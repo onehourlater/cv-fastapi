@@ -76,8 +76,8 @@ def user_manager(db_session: Session):
 
 
 @pytest.fixture()
-def auth_manager(db_session: Session, user_manager):
-    yield get_auth_manager(db_session, user_manager)
+def auth_manager(user_manager):
+    yield get_auth_manager(user_manager)
 
 
 @pytest.fixture(autouse=True)
