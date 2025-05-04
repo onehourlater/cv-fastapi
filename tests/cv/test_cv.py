@@ -22,6 +22,28 @@ class TestCV:
         response_json = response.json()
         assert response_json['about'] == TestConstants.CV_ABOUT
 
+    def test_create_cv_with_existed_slug(self, authenticated_client: TestClient, auth_manager):
+        cv: CV = CVFactory(slug=TestConstants.CV_SLUG)
+
+        response = authenticated_client.post(
+            '/api/v1/cvs/',
+            json={
+                'slug': cv.slug,
+                'about': TestConstants.CV_ABOUT,
+            },
+        )
+        assert response.status_code == 403
+
+    def test_create_cv_with_invalid_slug(self, authenticated_client: TestClient, auth_manager):
+        response = authenticated_client.post(
+            '/api/v1/cvs/',
+            json={
+                'slug': TestConstants.CV_INVALID_SLUG,
+                'about': TestConstants.CV_ABOUT,
+            },
+        )
+        assert response.status_code == 403
+
     def test_get_cvs(
         self, authenticated_client: TestClient, default_user: User, auth_manager
     ):
@@ -58,7 +80,7 @@ class TestCV:
     ):
         cv: CV = CVFactory(user=default_user)
 
-        response = authenticated_client.get(f'/api/v1/cvs/{cv.id}/public')
+        response = authenticated_client.get(f'/api/v1/cvs/{cv.slug}/public')
         assert response.status_code == 200
         response_json = response.json()
         assert 'user' in response_json
@@ -70,7 +92,7 @@ class TestCV:
     ):
         cv: CV = CVFactory()
 
-        response = client.get(f'/api/v1/cvs/{cv.id}/public')
+        response = client.get(f'/api/v1/cvs/{cv.slug}/public')
         assert response.status_code == 403
         response_json = response.json()
         assert response_json['detail'] == 'CV is private'

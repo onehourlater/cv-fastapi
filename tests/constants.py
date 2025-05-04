@@ -12,6 +12,8 @@ class TestConstants(Enum):
         'kind_of_activity': 'web delevoper',
         'about': 'about info',
     }
+    CV_SLUG = 'ABC'
+    CV_INVALID_SLUG = 'ABC few*bf'
     CV_ABOUT = 'im web fullstack developer'
 
     CV_PROJECT_TITLE = 'Pingdog SAAS'

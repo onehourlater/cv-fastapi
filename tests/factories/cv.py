@@ -10,6 +10,7 @@ class CVFactory(factory.alchemy.SQLAlchemyModelFactory):
         model = CV
         sqlalchemy_session_persistence = 'commit'
 
+    slug = factory.Faker('slug')
     about = factory.Faker('job')
     user = factory.SubFactory(UserFactory)
     # TODO: it it possible to depends on database records?

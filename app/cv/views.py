@@ -1,11 +1,12 @@
 import logging
 
-from typing import List
+from typing import Annotated, List
 
 from fastapi import APIRouter, HTTPException
-from fastapi import Depends
+from fastapi import Depends, Path
 
-from app.exceptions import NoPermission
+from app.config import AppSettings
+from app.exceptions import NoPermission, NotExistsError
 from app.auth.manager import get_current_user
 from app.user.models import User
 
@@ -40,15 +41,17 @@ async def get_cv(
     cv = cv_manager.get_cv_by_id(current_user, cv_id)
     return cv
 
-@cv_router.get('/{cv_id}/public')
+@cv_router.get('/{cv_slug}/public')
 async def get_cv_public(
     *,
     current_user: User = Depends(get_current_user(required=False)),
     cv_manager: CVManager = Depends(get_cv_manager),
-    cv_id: int,
+    cv_slug: Annotated[str, Path(pattern=AppSettings.CV_SLUG_PATTERN)],
 ) -> CVDetailPublic:
     try:
-        cv = cv_manager.get_public_cv_by_id(current_user, cv_id)
+        cv = cv_manager.get_public_cv_by_slug(current_user, cv_slug)
+    except NotExistsError as e:
+        raise HTTPException(404, str(e))
     except NoPermission as e:
         raise HTTPException(403, str(e))
     return cv
@@ -59,8 +62,12 @@ async def create_cv(
     current_user: User = Depends(get_current_user(required=True)),
     cv_manager: CVManager = Depends(get_cv_manager),
     cv_data: CreateCVBase,
-) -> CVList:
-    cv = cv_manager.create_cv(current_user, cv_data)
+) -> CVDetail:
+    try:
+        cv = cv_manager.create_cv(current_user, cv_data)
+    except ValueError as e:
+        raise HTTPException(403, str(e))
+
     return cv
 
 

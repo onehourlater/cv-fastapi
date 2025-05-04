@@ -3,6 +3,8 @@ from decouple import config
 
 class AppSettings:
     MEDIA_FOLDER_PATH: str = config('MEDIA_FOLDER_PATH', '')
+    CV_SLUG_PATTERN: str = '^[A-Za-z0-9_-]*$'
+
 
 class DBSettings:
     POSTGRES_HOSTNAME: str = config('DB_HOSTNAME', 'localhost')

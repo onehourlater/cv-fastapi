@@ -1,4 +1,5 @@
 import enum
+
 from typing import TYPE_CHECKING
 from datetime import datetime
 
@@ -24,10 +25,13 @@ class PublicStatus(enum.Enum):
     LINK_ACCESS = 1
     PRIVATE     = 0
 
+
 class CV(Base):
     __tablename__ = 'cv_table'
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    slug: Mapped[str] = mapped_column(unique=True)
+
     user_id: Mapped[int] = mapped_column(ForeignKey('user_table.id'))
     user: Mapped['User'] = relationship(back_populates='cvs')
 
