@@ -38,7 +38,10 @@ async def get_cv(
     cv_manager: CVManager = Depends(get_cv_manager),
     cv_id: int,
 ) -> CVDetail:
-    cv = cv_manager.get_cv_by_id(current_user, cv_id)
+    try:
+        cv = cv_manager.get_cv_by_id(current_user, cv_id)
+    except NoPermission as e:
+        raise HTTPException(403, str(e))
     return cv
 
 @cv_router.get('/{cv_slug}/public')

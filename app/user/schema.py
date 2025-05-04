@@ -1,4 +1,4 @@
-from typing import Union, List
+from typing import Optional, Union, List
 
 from pydantic import BaseModel
 
@@ -14,6 +14,10 @@ class CreateUserBase(BaseModel):
     password: str
 
 
+class UpdateUserBase(BaseModel):
+    username: Optional[str] = None
+
+
 class UserPictureBase(BaseModel):
     filename: str
 
@@ -25,7 +29,7 @@ class UserProfile(UserBase):
     about: Union[str, None] = None
 
 
-class UpdateUserBase(BaseModel):
+class UpdateUserProfile(BaseModel):
     full_name: str
     kind_of_activity: Union[str, None]
     about: Union[str, None]

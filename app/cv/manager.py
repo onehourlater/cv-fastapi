@@ -65,7 +65,7 @@ class CVManager:
 
         return create_cv(self.db, user.id, cv_data_to_create)
 
-    def get_cv_project(self, user: User, cv_id: int):
+    def get_cv_projects(self, user: User, cv_id: int):
         if not is_cv_belongs_to_user(self.db, cv_id, user.id):
             raise NoPermission('CV does not belong to User')
 

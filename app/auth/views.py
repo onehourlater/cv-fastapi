@@ -80,7 +80,7 @@ async def change_password(
 ):
     auth_manager.change_password(current_user, password)
 
-    return {'password': password}
+    return 'ok'
 
 
 @auth_router.post('/auth/refresh')

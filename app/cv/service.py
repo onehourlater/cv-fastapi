@@ -54,6 +54,9 @@ def create_cv(db: Session, user_id: int, cv_data: CreateCVBaseWithPosition) -> C
 
 def is_cv_belongs_to_user(db: Session, cv_id: int, user_id: int) -> CV:
     cv = db.get(CV, cv_id)
+    if not cv:
+        return False
+    
     if cv.user_id == user_id:
         return True
 

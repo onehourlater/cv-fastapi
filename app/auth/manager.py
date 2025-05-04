@@ -52,10 +52,7 @@ class AuthManager:
 
     def change_password(self, user: User, password: str) -> User:
         user_password_hashed = get_password_hash(password)
-
-        user.password = user_password_hashed
-        self.db.commit()
-
+        self.user_manager.change_user_password(user, user_password_hashed)
         return user
 
     # no tests

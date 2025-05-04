@@ -9,7 +9,7 @@ from .manager import UserManager, get_user_manager
 from app.auth.manager import get_current_user
 
 from .models import User
-from .schema import UserProfile, UpdateUserBase
+from .schema import UserProfile, UpdateUserProfile
 
 
 log = logging.getLogger(__name__)
@@ -52,7 +52,7 @@ async def get_user(user_id: int, user_manager=Depends(get_user_manager)) -> User
 async def update_user_profile(
     *,
     user_id: int,
-    userProfileData: UpdateUserBase,
+    userProfileData: UpdateUserProfile,
     user_manager=Depends(get_user_manager),
     current_user: Annotated[User, Depends(get_current_user(required=True))],
 ) -> UserProfile:

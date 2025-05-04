@@ -27,7 +27,7 @@ async def get_cv_projects_list(
     cv_id: int,
 ) -> List[CVProjectBase]:
     try:
-        cv_list = cv_manager.get_cv_project(current_user, cv_id)
+        cv_list = cv_manager.get_cv_projects(current_user, cv_id)
     except NoPermission as e:
         raise HTTPException(403, str(e))
     except Exception as e:
