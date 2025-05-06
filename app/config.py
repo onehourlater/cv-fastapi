@@ -2,16 +2,16 @@ from decouple import config
 
 
 class AppSettings:
-    MEDIA_FOLDER_PATH: str = config('MEDIA_FOLDER_PATH', '')
+    MEDIA_FOLDER_PATH: str = config('MEDIA_FOLDER_PATH', None)
     CV_SLUG_PATTERN: str = '^[A-Za-z0-9_-]*$'
 
 
 class DBSettings:
-    POSTGRES_HOSTNAME: str = config('DB_HOSTNAME', 'localhost')
-    POSTGRES_DB: str = config('DB_NAME', '')
-    POSTGRES_USER: str = config('DB_USER', '')
-    POSTGRES_PASSWORD: str = config('DB_PASSWORD', '')
-    DATABASE_PORT: int = config('DB_PORT', 5432)
+    POSTGRES_HOSTNAME: str = config('POSTGRES_HOSTNAME', 'localhost')
+    POSTGRES_DB: str = config('POSTGRES_DB', '')
+    POSTGRES_USER: str = config('POSTGRES_USER', '')
+    POSTGRES_PASSWORD: str = config('POSTGRES_PASSWORD', '')
+    DATABASE_PORT: int = config('POSTGRES_PORT', 5432)
 
 
 class AuthSettings:

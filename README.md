@@ -3,7 +3,7 @@
 
 ## Зависимости:
 - Нужен python3.9+
-- Нужна локально развернутая postgresql база данных
+- Нужна локально развернутая postgresql база данных или установленный Docker
 
 ## Запустить локально:
 
@@ -25,11 +25,11 @@ pip install -r requirements.txt
 ```bash
 MEDIA_FOLDER_PATH=/usr/local/opt/cv-fastapi/media
 
-DB_HOSTNAME=localhost
-DB_NAME=dbname
-DB_USER=dbuser
-DB_PASSWORD=dbpassword
-DB_PORT=5432
+POSTGRES_HOSTNAME=localhost
+POSTGRES_DB=dbname
+POSTGRES_USER=dbuser
+POSTGRES_PASSWORD=dbpassword
+POSTGRES_PORT=5432
 
 JWT_SECRET=somesecret
 JWT_ALGORITHM=HS256
@@ -38,6 +38,9 @@ JWT_EXPIRES=300
 # 30 days
 JWT_REFRESH_EXPIRES=2592000
 ```
+
+**Примечание:**
+media папка по пути MEDIA_FOLDER_PATH создастся автоматически (код создания в app/main.py)
 
 Запустите DEV сервер:
 
@@ -48,3 +51,13 @@ poe uvicorn
 Сервер запустится по адресу: [http://localhost:8000](http://localhost:8000)
 
 API docs можно посмотреть тут: [http://localhost:8000/docs](http://localhost:8000/docs)
+
+## Запустить через Docker:
+
+```bash
+# для запуска только postgres контейнера
+docker compose up postgres
+
+# для запуска postgres и fastapi контейнеров
+docker compose up
+```
