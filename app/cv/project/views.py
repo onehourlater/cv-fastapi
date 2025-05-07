@@ -49,7 +49,10 @@ async def create_cv_project(
 ) -> CVProjectBase:
     print()
     print('cv_project_data cv_project_data: ', cv_project_data)
-    cv = cv_manager.create_cv_project(current_user, cv_id, cv_project_data)
+    try:
+        cv = cv_manager.create_cv_project(current_user, cv_id, cv_project_data)
+    except NoPermission as e:
+        raise HTTPException(403, str(e))
     return cv
 
 
