@@ -7,7 +7,7 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - .:/cv-fastapi
+      - .:/cv-fastapi:ro
     depends_on:
       - postgres
     environment:
